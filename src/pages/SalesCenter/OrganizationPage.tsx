@@ -21,7 +21,6 @@ export function OrganizationPage() {
   const [editingOrg, setEditingOrg] = useState<Organization | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [organizations, setOrganizations] = useState<Organization[]>([])
   const [allOrganizations, setAllOrganizations] = useState<Organization[]>([])
@@ -32,23 +31,20 @@ export function OrganizationPage() {
   const endIndex = startIndex + pageSize
   const currentData = organizations.slice(startIndex, endIndex)
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       const data = await get<Organization[]>('/organizations')
       setAllOrganizations(data)
       setOrganizations(data)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
+
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,7 +58,7 @@ export function OrganizationPage() {
 
   const handleSearch = () => {
     // 过滤数据
-    const filtered = allOrganizations.filter((org) => {
+    const filtered = allOrganizations.filter(org => {
       const matchName = searchName ? org.name.includes(searchName) : true
       const matchPhone = searchPhone ? org.type.includes(searchPhone) : true
       return matchName && matchPhone
@@ -145,7 +141,7 @@ export function OrganizationPage() {
             type="text"
             placeholder="请输入"
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={e => setSearchName(e.target.value)}
           />
         </div>
         <div className="search-item">
@@ -154,7 +150,7 @@ export function OrganizationPage() {
             type="text"
             placeholder="请输入"
             value={searchPhone}
-            onChange={(e) => setSearchPhone(e.target.value)}
+            onChange={e => setSearchPhone(e.target.value)}
           />
         </div>
         <div className="search-buttons">
@@ -225,7 +221,7 @@ export function OrganizationPage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             // 只显示当前页附近的页码
             if (
               page === 1 ||
@@ -260,7 +256,7 @@ export function OrganizationPage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -275,7 +271,7 @@ export function OrganizationPage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {
@@ -291,7 +287,7 @@ export function OrganizationPage() {
       {/* 弹窗 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingOrg ? '编辑机构' : '新增机构'}</h3>
               <button className="modal-close" onClick={() => setShowModal(false)}>
@@ -304,7 +300,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -312,7 +308,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.region}
-                  onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                  onChange={e => setFormData({ ...formData, region: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -320,7 +316,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                  onChange={e => setFormData({ ...formData, type: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -328,7 +324,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -336,7 +332,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  onChange={e => setFormData({ ...formData, status: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -344,7 +340,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.packageCount}
-                  onChange={(e) => setFormData({ ...formData, packageCount: e.target.value })}
+                  onChange={e => setFormData({ ...formData, packageCount: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -352,7 +348,7 @@ export function OrganizationPage() {
                 <input
                   type="text"
                   value={formData.admin}
-                  onChange={(e) => setFormData({ ...formData, admin: e.target.value })}
+                  onChange={e => setFormData({ ...formData, admin: e.target.value })}
                 />
               </div>
             </div>

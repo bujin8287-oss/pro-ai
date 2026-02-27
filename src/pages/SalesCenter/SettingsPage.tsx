@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { useAuth } from '@/contexts'
+import { useState } from 'react'
 import './SettingsPage.css'
 
 interface UserSettings {
@@ -12,10 +11,9 @@ interface UserSettings {
 }
 
 export function SettingsPage() {
-  const { user } = useAuth()
   const [showAvatarModal, setShowAvatarModal] = useState(false)
   const [showPasswordModal, setShowPasswordModal] = useState(false)
-  
+
   const [userSettings, setUserSettings] = useState<UserSettings>({
     avatar: 'https://via.placeholder.com/80',
     name: '李四',
@@ -43,7 +41,7 @@ export function SettingsPage() {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onload = (event) => {
+      reader.onload = event => {
         if (event.target?.result) {
           setUserSettings({ ...userSettings, avatar: event.target.result as string })
           setShowAvatarModal(false)
@@ -66,7 +64,7 @@ export function SettingsPage() {
       alert('密码长度不能少于6位')
       return
     }
-    
+
     // 模拟更新密码
     setUserSettings({ ...userSettings, password: passwordForm.newPassword })
     setShowPasswordModal(false)
@@ -137,7 +135,7 @@ export function SettingsPage() {
       {/* 更换头像弹窗 */}
       {showAvatarModal && (
         <div className="modal-overlay" onClick={() => setShowAvatarModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>更换头像</h3>
               <button className="modal-close" onClick={() => setShowAvatarModal(false)}>
@@ -172,7 +170,7 @@ export function SettingsPage() {
       {/* 更换密码弹窗 */}
       {showPasswordModal && (
         <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>更换密码</h3>
               <button className="modal-close" onClick={() => setShowPasswordModal(false)}>
@@ -188,9 +186,7 @@ export function SettingsPage() {
                   type="password"
                   placeholder="请输入原密码"
                   value={passwordForm.oldPassword}
-                  onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, oldPassword: e.target.value })
-                  }
+                  onChange={e => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -201,9 +197,7 @@ export function SettingsPage() {
                   type="password"
                   placeholder="请输入新密码"
                   value={passwordForm.newPassword}
-                  onChange={(e) =>
-                    setPasswordForm({ ...passwordForm, newPassword: e.target.value })
-                  }
+                  onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -214,7 +208,7 @@ export function SettingsPage() {
                   type="password"
                   placeholder="请再次输入新密码"
                   value={passwordForm.confirmPassword}
-                  onChange={(e) =>
+                  onChange={e =>
                     setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
                   }
                 />

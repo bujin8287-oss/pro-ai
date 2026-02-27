@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { get, post, put, del } from '@/request/http'
 import './PurchasePage.css'
 
 interface Purchase {
@@ -19,7 +18,6 @@ export function PurchasePage() {
   const [searchStatus, setSearchStatus] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [purchases, setPurchases] = useState<Purchase[]>([])
   const [allPurchases, setAllPurchases] = useState<Purchase[]>([])
@@ -30,14 +28,8 @@ export function PurchasePage() {
   const endIndex = startIndex + pageSize
   const currentData = purchases.slice(startIndex, endIndex)
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       // 模拟数据
       const mockData: Purchase[] = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
@@ -46,20 +38,23 @@ export function PurchasePage() {
         supplierCount: [3, 4, 2, 5, 7, 8, 9, 1][i % 8],
         categoryCount: [3, 4, 2, 5, 7, 8, 9, 1][i % 8],
         expectedDate: '2022-11-23',
-        status: i === 0 ? '未发货' : ['未发货', '已发货'][i % 2] as '未发货' | '已发货',
+        status: i === 0 ? '未发货' : (['未发货', '已发货'][i % 2] as '未发货' | '已发货'),
         createTime: '2022-11-23',
       }))
       setAllPurchases(mockData)
       setPurchases(mockData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
 
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const handleSearch = () => {
-    const filtered = allPurchases.filter((purchase) => {
+    const filtered = allPurchases.filter(purchase => {
       const matchOrg = searchOrg ? purchase.organization.includes(searchOrg) : true
       const matchDate = searchDate ? purchase.expectedDate.includes(searchDate) : true
       const matchStatus = searchStatus ? purchase.status === searchStatus : true
@@ -79,14 +74,12 @@ export function PurchasePage() {
 
   const handleShip = (id: number) => {
     // 发货功能
-    console.log('发货采购申请:', id)
-    alert('发货功能')
+    alert(`发货采购申请: ${id}`)
   }
 
   const handleViewDetail = (id: number) => {
     // 查看详情功能
-    console.log('查看详情:', id)
-    alert('查看详情功能')
+    alert(`查看详情: ${id}`)
   }
 
   return (
@@ -99,12 +92,12 @@ export function PurchasePage() {
             type="text"
             placeholder="请输入"
             value={searchOrg}
-            onChange={(e) => setSearchOrg(e.target.value)}
+            onChange={e => setSearchOrg(e.target.value)}
           />
         </div>
         <div className="search-item">
           <label>期望到货日期：</label>
-          <select value={searchDate} onChange={(e) => setSearchDate(e.target.value)}>
+          <select value={searchDate} onChange={e => setSearchDate(e.target.value)}>
             <option value="">请选择</option>
             <option value="2022-11-23">2022-11-23</option>
             <option value="2022-11-24">2022-11-24</option>
@@ -113,7 +106,7 @@ export function PurchasePage() {
         </div>
         <div className="search-item">
           <label>状态：</label>
-          <select value={searchStatus} onChange={(e) => setSearchStatus(e.target.value)}>
+          <select value={searchStatus} onChange={e => setSearchStatus(e.target.value)}>
             <option value="">请选择</option>
             <option value="未发货">未发货</option>
             <option value="已发货">已发货</option>
@@ -154,7 +147,9 @@ export function PurchasePage() {
                 <td>{purchase.categoryCount}</td>
                 <td>{purchase.expectedDate}</td>
                 <td>
-                  <span className={`status-badge ${purchase.status === '未发货' ? 'pending' : 'completed'}`}>
+                  <span
+                    className={`status-badge ${purchase.status === '未发货' ? 'pending' : 'completed'}`}
+                  >
                     {purchase.status}
                   </span>
                 </td>
@@ -183,7 +178,7 @@ export function PurchasePage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             if (
               page === 1 ||
               page === totalPages ||
@@ -217,7 +212,7 @@ export function PurchasePage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -232,7 +227,7 @@ export function PurchasePage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {

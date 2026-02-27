@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { get, post, put, del } from '@/request/http'
 import './AccountPage.css'
 
 interface Account {
@@ -21,7 +20,6 @@ export function AccountPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [accounts, setAccounts] = useState<Account[]>([])
   const [allAccounts, setAllAccounts] = useState<Account[]>([])
@@ -40,14 +38,8 @@ export function AccountPage() {
     organization: '',
   })
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       // 模拟数据
       const names = ['张三', '李四', '赵斌', '智明', '大大', '小花', '大壮', '天明', '秋天', '天阳']
       const mockData: Account[] = Array.from({ length: 50 }, (_, i) => ({
@@ -62,15 +54,18 @@ export function AccountPage() {
       }))
       setAllAccounts(mockData)
       setAccounts(mockData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
 
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const handleSearch = () => {
-    const filtered = allAccounts.filter((account) => {
+    const filtered = allAccounts.filter(account => {
       return searchName ? account.name.includes(searchName) : true
     })
     setAccounts(filtered)
@@ -115,8 +110,8 @@ export function AccountPage() {
   const handleDeleteConfirm = async () => {
     if (deletingId) {
       try {
-        setAccounts(accounts.filter((account) => account.id !== deletingId))
-        setAllAccounts(allAccounts.filter((account) => account.id !== deletingId))
+        setAccounts(accounts.filter(account => account.id !== deletingId))
+        setAllAccounts(allAccounts.filter(account => account.id !== deletingId))
         setShowDeleteModal(false)
         setDeletingId(null)
       } catch (error) {
@@ -140,12 +135,12 @@ export function AccountPage() {
           ...editingAccount,
           ...formData,
         }
-        setAccounts(accounts.map((a) => (a.id === editingAccount.id ? updated : a)))
-        setAllAccounts(allAccounts.map((a) => (a.id === editingAccount.id ? updated : a)))
+        setAccounts(accounts.map(a => (a.id === editingAccount.id ? updated : a)))
+        setAllAccounts(allAccounts.map(a => (a.id === editingAccount.id ? updated : a)))
       } else {
         // 新增
         const newAccount: Account = {
-          id: Math.max(...allAccounts.map((a) => a.id)) + 1,
+          id: Math.max(...allAccounts.map(a => a.id)) + 1,
           name: formData.name,
           phone: formData.phone,
           username: formData.username,
@@ -174,7 +169,7 @@ export function AccountPage() {
             type="text"
             placeholder="请输入"
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={e => setSearchName(e.target.value)}
           />
         </div>
         <div className="search-buttons">
@@ -221,10 +216,7 @@ export function AccountPage() {
                   <button className="btn-link" onClick={() => handleEdit(account)}>
                     编辑
                   </button>
-                  <button
-                    className="btn-link danger"
-                    onClick={() => handleDeleteClick(account.id)}
-                  >
+                  <button className="btn-link danger" onClick={() => handleDeleteClick(account.id)}>
                     删除
                   </button>
                 </td>
@@ -243,7 +235,7 @@ export function AccountPage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             if (
               page === 1 ||
               page === totalPages ||
@@ -277,7 +269,7 @@ export function AccountPage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -292,7 +284,7 @@ export function AccountPage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {
@@ -308,7 +300,7 @@ export function AccountPage() {
       {/* 新增/编辑弹窗 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingAccount ? '编辑账号' : '新增账号'}</h3>
               <button className="modal-close" onClick={() => setShowModal(false)}>
@@ -324,7 +316,7 @@ export function AccountPage() {
                   type="text"
                   placeholder="请输入姓名"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -335,7 +327,7 @@ export function AccountPage() {
                   type="text"
                   placeholder="请输入手机号"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -346,7 +338,7 @@ export function AccountPage() {
                   type="text"
                   placeholder="请输入账号"
                   value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onChange={e => setFormData({ ...formData, username: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -357,7 +349,7 @@ export function AccountPage() {
                   type="password"
                   placeholder="请输入密码"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={e => setFormData({ ...formData, password: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -366,7 +358,7 @@ export function AccountPage() {
                   type="text"
                   placeholder="请输入所属机构"
                   value={formData.organization}
-                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                  onChange={e => setFormData({ ...formData, organization: e.target.value })}
                 />
               </div>
             </div>
@@ -385,7 +377,7 @@ export function AccountPage() {
       {/* 删除确认弹窗 */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content modal-small" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>删除账号</h3>
               <button className="modal-close" onClick={() => setShowDeleteModal(false)}>

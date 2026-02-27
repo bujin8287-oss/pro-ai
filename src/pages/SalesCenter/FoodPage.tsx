@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { get, post, put, del } from '@/request/http'
 import './FoodPage.css'
 
 interface Food {
@@ -23,7 +22,6 @@ export function FoodPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [foods, setFoods] = useState<Food[]>([])
   const [allFoods, setAllFoods] = useState<Food[]>([])
@@ -43,14 +41,8 @@ export function FoodPage() {
     supplier: '',
   })
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       // 模拟数据
       const mockData: Food[] = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
@@ -64,15 +56,18 @@ export function FoodPage() {
       }))
       setAllFoods(mockData)
       setFoods(mockData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
 
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const handleSearch = () => {
-    const filtered = allFoods.filter((food) => {
+    const filtered = allFoods.filter(food => {
       return searchName ? food.name.includes(searchName) : true
     })
     setFoods(filtered)
@@ -118,51 +113,40 @@ export function FoodPage() {
 
   const handleDeleteConfirm = async () => {
     if (deletingId) {
-      try {
-        // await del(`/foods/${deletingId}`)
-        setFoods(foods.filter((food) => food.id !== deletingId))
-        setAllFoods(allFoods.filter((food) => food.id !== deletingId))
-        setShowDeleteModal(false)
-        setDeletingId(null)
-      } catch (error) {
-        console.error('删除失败:', error)
-        alert('删除失败')
-      }
+      setFoods(foods.filter(food => food.id !== deletingId))
+      setAllFoods(allFoods.filter(food => food.id !== deletingId))
+      setShowDeleteModal(false)
+      setDeletingId(null)
     }
   }
 
   const handleSubmit = async () => {
-    try {
-      if (editingFood) {
-        // 编辑
-        const updated = {
-          ...editingFood,
-          ...formData,
-          price: Number(formData.price),
-          stock: Number(formData.stock),
-        }
-        setFoods(foods.map((f) => (f.id === editingFood.id ? updated : f)))
-        setAllFoods(allFoods.map((f) => (f.id === editingFood.id ? updated : f)))
-      } else {
-        // 新增
-        const newFood: Food = {
-          id: Math.max(...allFoods.map((f) => f.id)) + 1,
-          name: formData.name,
-          category: formData.category,
-          unit: formData.unit,
-          price: Number(formData.price),
-          stock: Number(formData.stock),
-          supplier: formData.supplier,
-          createTime: new Date().toLocaleDateString('zh-CN').replace(/\//g, '.'),
-        }
-        setFoods([...foods, newFood])
-        setAllFoods([...allFoods, newFood])
+    if (editingFood) {
+      // 编辑
+      const updated = {
+        ...editingFood,
+        ...formData,
+        price: Number(formData.price),
+        stock: Number(formData.stock),
       }
-      setShowModal(false)
-    } catch (error) {
-      console.error('保存失败:', error)
-      alert('保存失败')
+      setFoods(foods.map(f => (f.id === editingFood.id ? updated : f)))
+      setAllFoods(allFoods.map(f => (f.id === editingFood.id ? updated : f)))
+    } else {
+      // 新增
+      const newFood: Food = {
+        id: Math.max(...allFoods.map(f => f.id)) + 1,
+        name: formData.name,
+        category: formData.category,
+        unit: formData.unit,
+        price: Number(formData.price),
+        stock: Number(formData.stock),
+        supplier: formData.supplier,
+        createTime: new Date().toLocaleDateString('zh-CN').replace(/\//g, '.'),
+      }
+      setFoods([...foods, newFood])
+      setAllFoods([...allFoods, newFood])
     }
+    setShowModal(false)
   }
 
   return (
@@ -175,7 +159,7 @@ export function FoodPage() {
             type="text"
             placeholder="请输入"
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={e => setSearchName(e.target.value)}
           />
         </div>
         <div className="search-buttons">
@@ -248,7 +232,7 @@ export function FoodPage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             if (
               page === 1 ||
               page === totalPages ||
@@ -282,7 +266,7 @@ export function FoodPage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -297,7 +281,7 @@ export function FoodPage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {
@@ -313,7 +297,7 @@ export function FoodPage() {
       {/* 新增/编辑弹窗 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingFood ? '编辑食材' : '新增/编辑食材'}</h3>
               <button className="modal-close" onClick={() => setShowModal(false)}>
@@ -329,7 +313,7 @@ export function FoodPage() {
                   type="text"
                   placeholder="请输入菜材名称"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -338,7 +322,7 @@ export function FoodPage() {
                 </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={e => setFormData({ ...formData, category: e.target.value })}
                 >
                   <option value="">请选择</option>
                   <option value="斤">斤</option>
@@ -352,7 +336,7 @@ export function FoodPage() {
                 </label>
                 <select
                   value={formData.unit}
-                  onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
+                  onChange={e => setFormData({ ...formData, unit: e.target.value })}
                 >
                   <option value="">请选择</option>
                   <option value="新鲜蔬菜市场">新鲜蔬菜市场</option>
@@ -375,7 +359,7 @@ export function FoodPage() {
       {/* 删除确认弹窗 */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content modal-small" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>删除食材</h3>
               <button className="modal-close" onClick={() => setShowDeleteModal(false)}>

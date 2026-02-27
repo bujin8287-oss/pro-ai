@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './PriceAnalysisPage.css'
 
@@ -86,8 +86,8 @@ export function PriceAnalysisPage() {
   const chartHeight = height - padding.top - padding.bottom
 
   // 计算比例
-  const maxPrice = Math.max(...priceData.flatMap((d) => [d.price1, d.price2, d.price3]))
-  const minPrice = Math.min(...priceData.flatMap((d) => [d.price1, d.price2, d.price3]))
+  const maxPrice = Math.max(...priceData.flatMap(d => [d.price1, d.price2, d.price3]))
+  const minPrice = Math.min(...priceData.flatMap(d => [d.price1, d.price2, d.price3]))
   const priceRange = maxPrice - minPrice
   const xStep = chartWidth / (priceData.length - 1)
 
@@ -135,7 +135,7 @@ export function PriceAnalysisPage() {
         <div className="chart-content">
           <svg className="line-chart" viewBox={`0 0 ${width} ${height}`}>
             {/* Y轴网格线 */}
-            {[0, 1, 2, 3, 4].map((i) => {
+            {[0, 1, 2, 3, 4].map(i => {
               const y = padding.top + (chartHeight / 4) * i
               const price = maxPrice - (priceRange / 4) * i
               return (
@@ -198,7 +198,7 @@ export function PriceAnalysisPage() {
                 height={chartHeight}
                 fill={hoveredIndex === i ? '#f5f5f5' : 'transparent'}
                 className="hover-background"
-                onMouseMove={(e) => handleMouseMove(e, i)}
+                onMouseMove={e => handleMouseMove(e, i)}
                 onMouseLeave={handleMouseLeave}
               />
             ))}
@@ -249,21 +249,30 @@ export function PriceAnalysisPage() {
               <div className="legend-dot" style={{ background: '#1890ff' }}></div>
               <span className="legend-label">芹菜</span>
               <span className="legend-value">
-                {hoveredIndex !== null ? priceData[hoveredIndex].price1 : priceData[priceData.length - 1].price1}元
+                {hoveredIndex !== null
+                  ? priceData[hoveredIndex].price1
+                  : priceData[priceData.length - 1].price1}
+                元
               </span>
             </div>
             <div className="legend-item">
               <div className="legend-dot" style={{ background: '#52c41a' }}></div>
               <span className="legend-label">鸡肉</span>
               <span className="legend-value">
-                {hoveredIndex !== null ? priceData[hoveredIndex].price2 : priceData[priceData.length - 1].price2}元
+                {hoveredIndex !== null
+                  ? priceData[hoveredIndex].price2
+                  : priceData[priceData.length - 1].price2}
+                元
               </span>
             </div>
             <div className="legend-item">
               <div className="legend-dot" style={{ background: '#faad14' }}></div>
               <span className="legend-label">豆腐</span>
               <span className="legend-value">
-                {hoveredIndex !== null ? priceData[hoveredIndex].price3 : priceData[priceData.length - 1].price3}元
+                {hoveredIndex !== null
+                  ? priceData[hoveredIndex].price3
+                  : priceData[priceData.length - 1].price3}
+                元
               </span>
             </div>
           </div>
@@ -305,7 +314,7 @@ export function PriceAnalysisPage() {
           <select
             className="filter-select"
             value={selectedFilter}
-            onChange={(e) => setSelectedFilter(e.target.value)}
+            onChange={e => setSelectedFilter(e.target.value)}
           >
             <option value="all">全部食材</option>
             <option value="vegetable">蔬菜类</option>
@@ -324,7 +333,7 @@ export function PriceAnalysisPage() {
             </tr>
           </thead>
           <tbody>
-            {priceHistory.map((record) => (
+            {priceHistory.map(record => (
               <tr key={record.id}>
                 <td>{record.date}</td>
                 <td>{record.food}</td>

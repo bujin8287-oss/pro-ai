@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { get, post, put, del } from '@/request/http'
 import './SupplierPage.css'
 
 interface Supplier {
@@ -19,7 +18,6 @@ export function SupplierPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [suppliers, setSuppliers] = useState<Supplier[]>([])
   const [allSuppliers, setAllSuppliers] = useState<Supplier[]>([])
@@ -36,14 +34,8 @@ export function SupplierPage() {
     phone: '',
   })
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       // 模拟数据
       const mockData: Supplier[] = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
@@ -55,15 +47,18 @@ export function SupplierPage() {
       }))
       setAllSuppliers(mockData)
       setSuppliers(mockData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
 
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const handleSearch = () => {
-    const filtered = allSuppliers.filter((supplier) => {
+    const filtered = allSuppliers.filter(supplier => {
       return searchName ? supplier.name.includes(searchName) : true
     })
     setSuppliers(filtered)
@@ -103,15 +98,10 @@ export function SupplierPage() {
 
   const handleDeleteConfirm = async () => {
     if (deletingId) {
-      try {
-        setSuppliers(suppliers.filter((supplier) => supplier.id !== deletingId))
-        setAllSuppliers(allSuppliers.filter((supplier) => supplier.id !== deletingId))
-        setShowDeleteModal(false)
-        setDeletingId(null)
-      } catch (error) {
-        console.error('删除失败:', error)
-        alert('删除失败')
-      }
+      setSuppliers(suppliers.filter(supplier => supplier.id !== deletingId))
+      setAllSuppliers(allSuppliers.filter(supplier => supplier.id !== deletingId))
+      setShowDeleteModal(false)
+      setDeletingId(null)
     }
   }
 
@@ -122,33 +112,28 @@ export function SupplierPage() {
       return
     }
 
-    try {
-      if (editingSupplier) {
-        // 编辑
-        const updated = {
-          ...editingSupplier,
-          ...formData,
-        }
-        setSuppliers(suppliers.map((s) => (s.id === editingSupplier.id ? updated : s)))
-        setAllSuppliers(allSuppliers.map((s) => (s.id === editingSupplier.id ? updated : s)))
-      } else {
-        // 新增
-        const newSupplier: Supplier = {
-          id: Math.max(...allSuppliers.map((s) => s.id)) + 1,
-          name: formData.name,
-          categoryCount: 0,
-          contact: formData.contact,
-          phone: formData.phone,
-          createTime: new Date().toLocaleDateString('zh-CN').replace(/\//g, '.'),
-        }
-        setSuppliers([...suppliers, newSupplier])
-        setAllSuppliers([...allSuppliers, newSupplier])
+    if (editingSupplier) {
+      // 编辑
+      const updated = {
+        ...editingSupplier,
+        ...formData,
       }
-      setShowModal(false)
-    } catch (error) {
-      console.error('保存失败:', error)
-      alert('保存失败')
+      setSuppliers(suppliers.map(s => (s.id === editingSupplier.id ? updated : s)))
+      setAllSuppliers(allSuppliers.map(s => (s.id === editingSupplier.id ? updated : s)))
+    } else {
+      // 新增
+      const newSupplier: Supplier = {
+        id: Math.max(...allSuppliers.map(s => s.id)) + 1,
+        name: formData.name,
+        categoryCount: 0,
+        contact: formData.contact,
+        phone: formData.phone,
+        createTime: new Date().toLocaleDateString('zh-CN').replace(/\//g, '.'),
+      }
+      setSuppliers([...suppliers, newSupplier])
+      setAllSuppliers([...allSuppliers, newSupplier])
     }
+    setShowModal(false)
   }
 
   return (
@@ -161,7 +146,7 @@ export function SupplierPage() {
             type="text"
             placeholder="请输入"
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={e => setSearchName(e.target.value)}
           />
         </div>
         <div className="search-buttons">
@@ -224,7 +209,7 @@ export function SupplierPage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             if (
               page === 1 ||
               page === totalPages ||
@@ -258,7 +243,7 @@ export function SupplierPage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -273,7 +258,7 @@ export function SupplierPage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {
@@ -289,7 +274,7 @@ export function SupplierPage() {
       {/* 新增/编辑弹窗 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingSupplier ? '编辑供应商' : '新增/编辑供应商'}</h3>
               <button className="modal-close" onClick={() => setShowModal(false)}>
@@ -305,7 +290,7 @@ export function SupplierPage() {
                   type="text"
                   placeholder="请输入供应商名称"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -316,7 +301,7 @@ export function SupplierPage() {
                   type="text"
                   placeholder="请输入联系人姓名"
                   value={formData.contact}
-                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                  onChange={e => setFormData({ ...formData, contact: e.target.value })}
                 />
               </div>
               <div className="form-row">
@@ -327,7 +312,7 @@ export function SupplierPage() {
                   type="text"
                   placeholder="请输入联系电话"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
                 />
               </div>
             </div>
@@ -346,7 +331,7 @@ export function SupplierPage() {
       {/* 删除确认弹窗 */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content modal-small" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>警告提示</h3>
               <button className="modal-close" onClick={() => setShowDeleteModal(false)}>

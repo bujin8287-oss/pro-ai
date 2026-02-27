@@ -3,16 +3,35 @@ declare module 'mockjs' {
     timeout?: string | number
   }
 
+  interface MockjsRandom {
+    cname(): string
+    city(): string
+    county(): string
+    integer(min: number, max: number): number
+    date(format?: string): string
+    pick<T>(arr: T[]): T
+    guid(): string
+    id(): string
+    natural(min?: number, max?: number): number
+    float(min: number, max: number, dmin?: number, dmax?: number): number
+    character(pool?: string): string
+    string(pool?: string, min?: number, max?: number): string
+    range(start: number, stop?: number, step?: number): number[]
+  }
+
   interface MockjsStatic {
-    mock(
+    mock<T>(
       rurl: string | RegExp,
       rtype: string,
-      template: any | ((options: any) => any),
-    ): any
-    mock(rurl: string | RegExp, template: any | ((options: any) => any)): any
-    mock(template: any): any
+      template: Record<string, unknown> | ((options: Record<string, unknown>) => T),
+    ): T
+    mock<T>(
+      rurl: string | RegExp,
+      template: Record<string, unknown> | ((options: Record<string, unknown>) => T),
+    ): T
+    mock<T>(template: Record<string, unknown>): T
     setup(settings: MockjsSetupSettings): void
-    Random: any
+    Random: MockjsRandom
   }
 
   const Mock: MockjsStatic

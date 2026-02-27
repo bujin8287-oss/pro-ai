@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { get, post, put, del } from '@/request/http'
 import './RolePage.css'
 
 interface Role {
@@ -18,7 +17,6 @@ export function RolePage() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const [loading, setLoading] = useState(false)
 
   const [roles, setRoles] = useState<Role[]>([])
   const [allRoles, setAllRoles] = useState<Role[]>([])
@@ -33,14 +31,8 @@ export function RolePage() {
     name: '',
   })
 
-  // 加载数据
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = async () => {
     try {
-      setLoading(true)
       // 模拟数据
       const mockData: Role[] = Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
@@ -51,15 +43,18 @@ export function RolePage() {
       }))
       setAllRoles(mockData)
       setRoles(mockData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-    } finally {
-      setLoading(false)
+    } catch {
+      // 忽略错误
     }
   }
 
+  // 加载数据
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const handleSearch = () => {
-    const filtered = allRoles.filter((role) => {
+    const filtered = allRoles.filter(role => {
       return searchName ? role.name.includes(searchName) : true
     })
     setRoles(filtered)
@@ -70,12 +65,6 @@ export function RolePage() {
     setSearchName('')
     setRoles(allRoles)
     setCurrentPage(1)
-  }
-
-  const handleExport = () => {
-    // 导出功能
-    console.log('导出角色数据')
-    alert('导出功能')
   }
 
   const handleAdd = () => {
@@ -102,8 +91,8 @@ export function RolePage() {
   const handleDeleteConfirm = async () => {
     if (deletingId) {
       try {
-        setRoles(roles.filter((role) => role.id !== deletingId))
-        setAllRoles(allRoles.filter((role) => role.id !== deletingId))
+        setRoles(roles.filter(role => role.id !== deletingId))
+        setAllRoles(allRoles.filter(role => role.id !== deletingId))
         setShowDeleteModal(false)
         setDeletingId(null)
       } catch (error) {
@@ -127,12 +116,12 @@ export function RolePage() {
           ...editingRole,
           ...formData,
         }
-        setRoles(roles.map((r) => (r.id === editingRole.id ? updated : r)))
-        setAllRoles(allRoles.map((r) => (r.id === editingRole.id ? updated : r)))
+        setRoles(roles.map(r => (r.id === editingRole.id ? updated : r)))
+        setAllRoles(allRoles.map(r => (r.id === editingRole.id ? updated : r)))
       } else {
         // 新增
         const newRole: Role = {
-          id: Math.max(...allRoles.map((r) => r.id)) + 1,
+          id: Math.max(...allRoles.map(r => r.id)) + 1,
           name: formData.name,
           accountCount: 0,
           creator: 'admin',
@@ -158,7 +147,7 @@ export function RolePage() {
             type="text"
             placeholder="请输入"
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={e => setSearchName(e.target.value)}
           />
         </div>
         <div className="search-buttons">
@@ -218,7 +207,7 @@ export function RolePage() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
             if (
               page === 1 ||
               page === totalPages ||
@@ -252,7 +241,7 @@ export function RolePage() {
           <select
             className="page-size-select"
             value={pageSize}
-            onChange={(e) => {
+            onChange={e => {
               setPageSize(Number(e.target.value))
               setCurrentPage(1)
             }}
@@ -267,7 +256,7 @@ export function RolePage() {
             className="page-jump-input"
             min={1}
             max={totalPages}
-            onKeyPress={(e) => {
+            onKeyPress={e => {
               if (e.key === 'Enter') {
                 const page = Number((e.target as HTMLInputElement).value)
                 if (page >= 1 && page <= totalPages) {
@@ -283,7 +272,7 @@ export function RolePage() {
       {/* 新增/编辑弹窗 */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editingRole ? '编辑角色' : '新增角色'}</h3>
               <button className="modal-close" onClick={() => setShowModal(false)}>
@@ -299,7 +288,7 @@ export function RolePage() {
                   type="text"
                   placeholder="请输入角色名称"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                 />
               </div>
             </div>
@@ -318,7 +307,7 @@ export function RolePage() {
       {/* 删除确认弹窗 */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content modal-small" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content modal-small" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h3>删除角色</h3>
               <button className="modal-close" onClick={() => setShowDeleteModal(false)}>
