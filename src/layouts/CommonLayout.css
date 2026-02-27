@@ -76,6 +76,8 @@
   text-decoration: none;
   transition: all 0.3s;
   border-left: 3px solid transparent;
+  display: flex;
+  align-items: center;
 }
 
 .nav-item:hover {
@@ -87,6 +89,66 @@
   background: #e6f7ff;
   color: #1890ff;
   border-left-color: #1890ff;
+}
+
+/* 导航分组 */
+.nav-group {
+  margin: 4px 0;
+}
+
+.nav-group-title {
+  padding: 12px 24px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.nav-group-title:hover {
+  background: #f0f0f0;
+  color: #1890ff;
+}
+
+.nav-arrow {
+  margin-left: auto;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.nav-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.nav-group-items {
+  display: flex;
+  flex-direction: column;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.nav-group-items.expanded {
+  max-height: 500px;
+}
+
+.nav-sub-item {
+  padding: 10px 24px 10px 56px;
+  color: #595959;
+  text-decoration: none;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+
+.nav-sub-item:hover {
+  background: #f0f0f0;
+  color: #1890ff;
+}
+
+.nav-sub-item.active {
+  background: #e6f7ff;
+  color: #1890ff;
 }
 
 .layout-main {

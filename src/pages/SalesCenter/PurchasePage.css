@@ -1,0 +1,244 @@
+.purchase-page {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100%;
+}
+
+/* 搜索栏 */
+.search-bar {
+  background: white;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  flex-wrap: wrap;
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-item label {
+  font-size: 14px;
+  color: #262626;
+  white-space: nowrap;
+}
+
+.search-item input,
+.search-item select {
+  width: 200px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.search-item input:focus,
+.search-item select:focus {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+.search-item input::placeholder {
+  color: #bfbfbf;
+}
+
+.search-item select {
+  cursor: pointer;
+}
+
+.search-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-primary {
+  height: 32px;
+  padding: 0 16px;
+  background: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: #40a9ff;
+}
+
+.btn-default {
+  height: 32px;
+  padding: 0 16px;
+  background: white;
+  color: #262626;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-default:hover {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+
+/* 表格容器 */
+.table-container {
+  background: white;
+  padding: 24px;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.data-table thead {
+  background: #fafafa;
+}
+
+.data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 500;
+  color: #262626;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  color: #595959;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #1890ff;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: all 0.3s;
+}
+
+.btn-link:hover {
+  color: #40a9ff;
+}
+
+/* 状态标签 */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.status-badge.pending {
+  background: #fff7e6;
+  color: #fa8c16;
+  border: 1px solid #ffd591;
+}
+
+.status-badge.completed {
+  background: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+/* 分页 */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.total {
+  font-size: 14px;
+  color: #595959;
+  margin-right: auto;
+}
+
+.page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  background: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.page-btn:hover:not(:disabled) {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+
+.page-btn.active {
+  background: #1890ff;
+  color: white;
+  border-color: #1890ff;
+}
+
+.page-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page-ellipsis {
+  padding: 0 8px;
+  color: #595959;
+}
+
+.page-size-select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.page-jump-label {
+  font-size: 14px;
+  color: #595959;
+}
+
+.page-jump-input {
+  width: 50px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.page-jump-input:focus {
+  outline: none;
+  border-color: #1890ff;
+}

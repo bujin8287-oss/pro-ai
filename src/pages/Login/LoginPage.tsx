@@ -24,10 +24,10 @@ export function LoginPage() {
       name = '运营管理员'
     } else if (username.includes('center') || username.includes('中心')) {
       role = UserRole.SALES_CENTER
-      name = '销售中心管理员'
+      name = '机构中心管理员'
     } else {
       role = UserRole.SALES
-      name = '销售人员'
+      name = '机构人员'
     }
 
     const user = {
@@ -85,8 +85,8 @@ export function LoginPage() {
         <div className="login-tips">
           <p>测试账号提示：</p>
           <p>- 用户名包含 "operations" 或 "运营" → 运营端</p>
-          <p>- 用户名包含 "center" 或 "中心" → 销售中心端</p>
-          <p>- 其他用户名 → 销售端</p>
+          <p>- 用户名包含 "center" 或 "中心" → 机构中心端</p>
+          <p>- 其他用户名 → 机构端</p>
         </div>
       </div>
     </div>

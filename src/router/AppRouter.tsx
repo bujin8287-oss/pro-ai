@@ -33,10 +33,14 @@ import {
 // Sales Center Pages
 import {
   SalesCenterDashboard,
-  TeamPage,
-  ReportsPage,
-  TargetsPage,
-  CenterSettingsPage,
+  OrganizationPage,
+  FoodPage,
+  PriceAnalysisPage,
+  SupplierPage,
+  PurchasePage,
+  AccountPage,
+  RolePage,
+  SettingsPage as SalesCenterSettingsPage,
 } from '@/pages/SalesCenter'
 
 export function AppRouter() {
@@ -63,7 +67,7 @@ export function AppRouter() {
             <Route path="settings" element={<SettingsPage />} />
           </Route>
 
-          {/* 销售端路由 */}
+          {/* 机构端路由 */}
           <Route
             path="/sales"
             element={
@@ -79,7 +83,7 @@ export function AppRouter() {
             <Route path="profile" element={<ProfilePage />} />
           </Route>
 
-          {/* 销售中心端路由 */}
+          {/* 机构中心端路由 */}
           <Route
             path="/sales-center"
             element={
@@ -89,10 +93,14 @@ export function AppRouter() {
             }
           >
             <Route index element={<SalesCenterDashboard />} />
-            <Route path="team" element={<TeamPage />} />
-            <Route path="reports" element={<ReportsPage />} />
-            <Route path="targets" element={<TargetsPage />} />
-            <Route path="settings" element={<CenterSettingsPage />} />
+            <Route path="organization" element={<OrganizationPage />} />
+            <Route path="food" element={<FoodPage />} />
+            <Route path="price-analysis" element={<PriceAnalysisPage />} />
+            <Route path="supplier" element={<SupplierPage />} />
+            <Route path="purchase" element={<PurchasePage />} />
+            <Route path="account" element={<AccountPage />} />
+            <Route path="role" element={<RolePage />} />
+            <Route path="settings" element={<SalesCenterSettingsPage />} />
           </Route>
 
           {/* 根路径重定向到登录页 */}

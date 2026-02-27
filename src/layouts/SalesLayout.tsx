@@ -15,7 +15,7 @@ export function SalesLayout() {
     <div className="layout">
       <header className="layout-header">
         <div className="header-left">
-          <h1 className="header-title">销售端</h1>
+          <h1 className="header-title">机构端</h1>
         </div>
         <div className="header-right">
           <span className="user-info">
