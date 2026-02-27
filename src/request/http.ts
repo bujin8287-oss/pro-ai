@@ -1,9 +1,5 @@
-import axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios'
+import axios from 'axios'
+import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { logger } from '../utils/logger'
 import { readJson } from '../utils/storage'
 
@@ -39,7 +35,7 @@ http.interceptors.request.use(
     }
     return config
   },
-  (error) => {
+  error => {
     logger.error('请求错误：', error)
     return Promise.reject(error)
   },
@@ -47,7 +43,7 @@ http.interceptors.request.use(
 
 // 响应拦截：统一处理返回数据 / 错误
 http.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
+  response => {
     const res = response.data
 
     // 如果你的后端有 code 约定，可以在这里统一判断
@@ -62,9 +58,9 @@ http.interceptors.response.use(
     }
 
     // 默认只把真正的 data 返回，调用方拿到的就是业务数据
-    return (res.data ?? res) as unknown
+    return res.data ?? res
   },
-  (error) => {
+  error => {
     // 这里可以把网络错误 / 服务器错误也统一包装一下
     const err: HttpError = new Error('网络异常，请稍后重试')
 
@@ -81,9 +77,7 @@ http.interceptors.response.use(
 )
 
 // 通用请求方法：支持范型，方便推断返回类型
-export function request<T = unknown, D = unknown>(
-  config: AxiosRequestConfig<D>,
-): Promise<T> {
+export function request<T = unknown, D = unknown>(config: AxiosRequestConfig<D>): Promise<T> {
   return http.request<ApiResponse<T>, T>(config)
 }
 
@@ -119,5 +113,3 @@ export function del<T = unknown, D = unknown>(
 }
 
 export default http
-
-

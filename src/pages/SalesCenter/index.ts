@@ -1,0 +1,5 @@
+export { SalesCenterDashboard } from './SalesCenterDashboard'
+export { TeamPage } from './TeamPage'
+export { ReportsPage } from './ReportsPage'
+export { TargetsPage } from './TargetsPage'
+export { CenterSettingsPage } from './CenterSettingsPage'

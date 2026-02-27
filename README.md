@@ -1,73 +1,68 @@
-# React + TypeScript + Vite
+# 养老系统项目
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+基于 React + TypeScript + Vite 的多角色管理系统
 
-Currently, two official plugins are available:
+## 技术栈
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- TypeScript
+- React Router v7
+- Axios
+- Vite
 
-## React Compiler
+## 项目结构
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── components/      # 公共组件
+├── contexts/        # React Context (认证等)
+├── layouts/         # 三个角色的布局组件
+├── pages/           # 页面组件
+│   ├── Login/       # 登录页面
+│   ├── Operations/  # 运营端页面
+│   ├── Sales/       # 销售端页面
+│   └── SalesCenter/ # 销售中心端页面
+├── request/         # HTTP 请求封装
+├── router/          # 路由配置
+├── types/           # TypeScript 类型定义
+└── utils/           # 工具函数
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 三个角色系统
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **运营端** (`/operations`) - 平台管理、用户管理、订单管理等
+- **销售端** (`/sales`) - 客户管理、任务管理、业绩统计等
+- **销售中心端** (`/sales-center`) - 团队管理、报表分析、目标管理等
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 开发
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
+
+# 代码检查
+npm run lint
+
+# 代码格式化
+npm run format
 ```
+
+## 测试账号
+
+登录时根据用户名自动判断角色：
+- 包含 "operations" 或 "运营" → 运营端
+- 包含 "center" 或 "中心" → 销售中心端
+- 其他 → 销售端
+
+## 开发指南
+
+1. 在对应的 `pages/` 文件夹下开发页面功能
+2. 使用 `@/request/http` 进行 API 调用
+3. 使用 `useAuth()` 获取当前用户信息
+4. 新增路由需在 `router/AppRouter.tsx` 中配置

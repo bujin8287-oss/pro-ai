@@ -1,0 +1,5 @@
+export { SalesDashboard } from './SalesDashboard'
+export { CustomersPage } from './CustomersPage'
+export { TasksPage } from './TasksPage'
+export { PerformancePage } from './PerformancePage'
+export { ProfilePage } from './ProfilePage'
