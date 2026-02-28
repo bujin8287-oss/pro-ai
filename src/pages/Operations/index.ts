@@ -1,4 +1,8 @@
 export { OperationsDashboard } from './OperationsDashboard'
+export { OrganizationPage } from './OrganizationPage'
+export { AccountPage } from './AccountPage'
+export { RolePage } from './RolePage'
+export { AccountSettingsPage } from './AccountSettingsPage'
 export { PlatformPage } from './PlatformPage'
 export { UsersPage } from './UsersPage'
 export { OrdersPage } from './OrdersPage'
