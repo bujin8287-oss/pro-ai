@@ -1,4 +1,4 @@
-.sales-center-dashboard {
+.operations-dashboard {
   padding: 24px;
   background-color: #f5f7fa;
   min-height: 100%;
@@ -194,7 +194,7 @@
 }
 
 @media (max-width: 768px) {
-  .sales-center-dashboard {
+  .operations-dashboard {
     padding: 16px;
   }
 

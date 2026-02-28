@@ -78,6 +78,9 @@
   border-left: 3px solid transparent;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .nav-item:hover {
@@ -91,9 +94,54 @@
   border-left-color: #1890ff;
 }
 
-/* 导航分组 */
+/* 导航分组 - 运营端样式 */
+.nav-item-group {
+  margin: 0;
+}
+
+.nav-item-parent {
+  font-weight: 500;
+}
+
+.nav-arrow {
+  font-size: 10px;
+  transition: transform 0.3s;
+  color: #999;
+}
+
+.nav-arrow.open {
+  transform: rotate(180deg);
+}
+
+.nav-submenu {
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+}
+
+.nav-subitem {
+  padding: 10px 24px 10px 48px;
+  color: #595959;
+  text-decoration: none;
+  transition: all 0.3s;
+  font-size: 14px;
+  border-left: 3px solid transparent;
+}
+
+.nav-subitem:hover {
+  background: #f0f0f0;
+  color: #1890ff;
+}
+
+.nav-subitem.active {
+  background: #e6f7ff;
+  color: #1890ff;
+  border-left-color: #1890ff;
+}
+
+/* 导航分组 - 机构中心端样式 */
 .nav-group {
-  margin: 4px 0;
+  margin: 0;
 }
 
 .nav-group-title {
@@ -103,7 +151,10 @@
   transition: all 0.3s;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-weight: 500;
+  font-size: 14px;
+  border-left: 3px solid transparent;
 }
 
 .nav-group-title:hover {
@@ -111,13 +162,14 @@
   color: #1890ff;
 }
 
-.nav-arrow {
+.nav-group-title .nav-arrow {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 10px;
   transition: transform 0.3s;
+  color: #999;
 }
 
-.nav-arrow.expanded {
+.nav-group-title .nav-arrow.expanded {
   transform: rotate(180deg);
 }
 
@@ -127,6 +179,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
+  background: #fafafa;
 }
 
 .nav-group-items.expanded {
@@ -134,11 +187,12 @@
 }
 
 .nav-sub-item {
-  padding: 10px 24px 10px 56px;
+  padding: 10px 24px 10px 48px;
   color: #595959;
   text-decoration: none;
   transition: all 0.3s;
   font-size: 14px;
+  border-left: 3px solid transparent;
 }
 
 .nav-sub-item:hover {
@@ -149,11 +203,11 @@
 .nav-sub-item.active {
   background: #e6f7ff;
   color: #1890ff;
+  border-left-color: #1890ff;
 }
 
 .layout-main {
   flex: 1;
-  padding: 24px;
   background: #f0f2f5;
   overflow-y: auto;
 }

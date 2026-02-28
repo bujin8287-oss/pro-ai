@@ -15,6 +15,10 @@ import { NotFoundPage } from '@/pages/NotFound'
 // Operations Pages
 import {
   OperationsDashboard,
+  OrganizationPage as OperationsOrganizationPage,
+  AccountPage as OperationsAccountPage,
+  RolePage as OperationsRolePage,
+  AccountSettingsPage as OperationsAccountSettingsPage,
   PlatformPage,
   UsersPage,
   OrdersPage,
@@ -33,7 +37,7 @@ import {
 // Sales Center Pages
 import {
   SalesCenterDashboard,
-  OrganizationPage,
+  OrganizationPage as SalesCenterOrganizationPage,
   FoodPage,
   PriceAnalysisPage,
   SupplierPage,
@@ -61,6 +65,10 @@ export function AppRouter() {
             }
           >
             <Route index element={<OperationsDashboard />} />
+            <Route path="organization" element={<OperationsOrganizationPage />} />
+            <Route path="account" element={<OperationsAccountPage />} />
+            <Route path="role" element={<OperationsRolePage />} />
+            <Route path="account-settings" element={<OperationsAccountSettingsPage />} />
             <Route path="platform" element={<PlatformPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="orders" element={<OrdersPage />} />
@@ -93,7 +101,7 @@ export function AppRouter() {
             }
           >
             <Route index element={<SalesCenterDashboard />} />
-            <Route path="organization" element={<OrganizationPage />} />
+            <Route path="organization" element={<SalesCenterOrganizationPage />} />
             <Route path="food" element={<FoodPage />} />
             <Route path="price-analysis" element={<PriceAnalysisPage />} />
             <Route path="supplier" element={<SupplierPage />} />
